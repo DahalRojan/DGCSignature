@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+        <title>DigiConnect</title>
+
+         <!-- Bootstrap CSS CDN -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js">
+        <!-- Our Custom CSS -->
+        <link rel="stylesheet" href="style5.css">
+    </head>
+    <body>
+
+
+
+        <div class="wrapper">
+            <!-- Sidebar Holder -->
+            <nav id="sidebar">
+                <div class="sidebar-header">
+                    <h1><a href="index5.html" class="logo"><img src="images/DGC.png" alt="DigiConnect" style='max-width:200px; image-rendering: pixelated;'></a></h1>
+                    <h3>Signature Classification</h3>
+                </div>
+
+                <ul class="list-unstyled components">
+                    <li class="active">
+                        <a href="#">Extractor</a>
+                    </li>
+                    <li>
+                        <a href="comparer.html">Comparer</a>
+                    </li>
+                    <li>
+                        <a href="#">Checker</a>
+                    </li>
+                    <li>
+                        <a href="#">Verifier</a>
+                    </li>
+                </ul>
+              <div class="footer">
+            <p>
+              Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved</p>
+          </div>
+            </nav>
+
+            <!-- Page Content Holder -->
+            <div id="content">
+
+
+                <h2>Extractor</h2>
+                <div class="line"></div>
+                <div class="container mt-5">
+                  <div class="col-sm-12 col-lg-14 mr-auto ml-auto border p-4">
+                  <form method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                      <label><strong>Upload Image</strong></label>
+                      <div class="custom-file">
+                        <input type="file" name="files[]" accept="image/png, image/gif, image/jpeg" multiple class="custom-file-input form-control" id="customFile">
+                        <label class="custom-file-label" for="customFile">Choose Image</label>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <button type="button" name="upload" value="upload" id="upload" class="btn btn-block btn-dark"><i class="fa fa-fw fa-upload"></i> Extract</button>
+
+                    </div>
+                    <img id="blah" src="" alt="" style="max-width: 250px;" />
+
+                  </form>
+                </div>
+
+                
+
+            </div>
+        </div>
+
+
+
+
+        <!-- jQuery CDN -->
+         <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+         <!-- Bootstrap Js CDN -->
+         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+         <script src="js/img.js"></script>
+
+
+         <script type="text/javascript">
+             $(document).ready(function () {
+                 $('#sidebarCollapse').on('click', function () {
+                     $('#sidebar').toggleClass('active');
+                     $(this).toggleClass('active');
+                 });
+             });
+         </script>
+         <script type="text/javascript">
+            $(document).ready(function() {
+              $('input[type="file"]').on("change", function() {
+                let filenames = [];
+                let files = this.files;
+                if (files.length > 1) {
+                  filenames.push("Total Files (" + files.length + ")");
+                } else {
+                  for (let i in files) {
+                    if (files.hasOwnProperty(i)) {
+                      filenames.push(files[i].name);
+                    }
+                  }
+                }
+                $(this)
+                  .next(".custom-file-label")
+                  .html(filenames.join(","));
+              });
+            });
+         </script>
+    </body>
+</html>

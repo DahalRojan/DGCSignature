@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+        <title>DigiConnect</title>
+
+         <!-- Bootstrap CSS CDN -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js">
+        <!-- Our Custom CSS -->
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static', path='/styles/style5.css')}}">
+      </head>
+    <body>
+
+        <div class="wrapper">
+            <!-- Sidebar Holder -->
+            <nav id="sidebar">
+                <div class="sidebar-header">
+                    <h1><a href="/" class="logo"><img src="{{ url_for('static', path='/images/DGC.png')}}" alt="DigiConnect" style='max-width:200px; image-rendering: pixelated;'></a></h1>
+                    <h3>Signature Classification</h3>
+                </div>
+
+                <ul class="list-unstyled components">
+                    <li class="active">
+                        <a href="#">Extractor</a>
+                    </li>
+                    <li>
+                        <a href="/comparer">Comparer</a>
+                    </li>
+                    <li>
+                        <a href="/checker">Checker</a>
+                    </li>
+                    <li>
+                        <a href="/verifier">Verifier</a>
+                    </li>
+                </ul>
+              <div class="footer">
+            <p>
+              Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved</p>
+          </div>
+            </nav>
+
+            <!-- Page Content Holder -->
+            <div id="content">
+
+
+                <h2>Extractor</h2>
+                <div class="line"></div>
+                <div class="container mt-5">
+                  <div class="col-sm-12 col-lg-14 mr-auto ml-auto border p-4">
+                  <form class="uploadForm" id="theForm" method="post" name="fileinfo">
+                    <div class="form-group">
+                      <label><strong>Upload Image</strong></label>
+                      <div class="custom-file">
+                        <input type="file" name="image" accept="image/png, image/gif, image/jpeg" multiple class="custom-file-input form-control" id="customFile">
+                        <label class="custom-file-label" for="customFile">Choose Image</label>
+                      </div>
+
+                      <div class="form-group">
+                        <div class="line"></div>
+                        <label>Clean : </label>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="clean" id="inlineRadio1" value="">
+                          <label class="form-check-label" for="inlineRadio1">True</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="clean" id="inlineRadio2" value="">
+                          <label class="form-check-label" for="inlineRadio2">False</label>
+                        </div>
+              
+                      </div>
+
+                    </div>
+                    <div class="form-group">
+                      <button type="submit" name="upload" value="upload" id="upload" class="btn btn-block btn-dark" data-toggle="modal" data-target="#myModal"><i class="fa fa-fw fa-upload"></i> Extract</button>
+                    </div>
+                    
+                    <img id="blah" src="" alt="" style="max-width: 250px;" />
+                  </form>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div id="content">
+          <h2 style="color: red;">Output</h2>
+          <div class="line"></div>
+        <h2 id="pred_score"></h2>
+        <img id="extracted-img" class="rounded float-left"></img>
+        </div>
+        
+        
+        <script>
+
+
+        var form = document.forms.namedItem("fileinfo");
+        form.addEventListener('submit', function(ev) {
+
+      //  var oOutput = document.querySelector("article"),
+       
+      
+      oData = new FormData(form);
+
+  //   var xhr = new XMLHttpRequest();
+  // xhr.open("POST", "http://192.168.107.178:8000/extractor?clean=true", true);
+  // xhr.setRequestHeader('Content-Type', 'application/json');
+  // xhr.send(JSON.stringify({
+  //     value: value
+  // }));
+  var oReq = new XMLHttpRequest();
+  if (document.getElementById('inlineRadio1').checked) {
+        // Basic package is checked
+        oReq.open("POST", "http://192.168.107.178:8000/extractor?clean=true", true);
+
+
+    } else if (document.getElementById('inlineRadio2').checked) {
+        // Pro package is checked
+        oReq.open("POST", "http://192.168.107.178:8000/extractor?clean=false", true);
+
+    }
+  oReq.overrideMimeType("text/plain; charset=x-user-defined");
+  oReq.onload = function(oEvent) {
+    if (oReq.status == 200) {
+      var exData = JSON.parse(oReq.responseText)
+      // alert("Success")
+      // alert(exData.data.extracted_image);
+      console.log(this.responseText);
+      document.getElementById('pred_score').innerHTML ="Predicted Score: "+ exData.data.pred_score;
+      var image = document.getElementById("extracted-img");
+      image.src = 'data:image/gif;base64,' + exData.data.extracted_image + ' ';
+      console.log(image);
+      
+      
+    } else {
+      oOutput.innerHTML = "Error " + oReq.status + " occurred when trying to upload your file.<br \/>";
+    }
+    
+  }
+  
+  oReq.send(oData);
+  ev.preventDefault();
+},false);
+
+</script>
+       
+
+
+
+
+        <!-- jQuery CDN -->
+         <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+         <!-- Bootstrap Js CDN -->
+         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+         <script src="{{ url_for('static', path='/js/img.js')}}"></script>
+         <!-- <script src="{{ url_for('static', path='/js/request.js')}}"></script> -->
+         <script>
+          // function proceedUpload(e) {
+          //   e.preventDefault();
+          //   // alert("test")
+          //   var file = document.querySelector('[id=customFile]').files;
+          //   var formdata = new FormData();
+          //   formdata.append('image', file[0]);
+          //   // alert(formdata);
+          //   var xhr = new XMLHttpRequest();
+          //   xhr.open("POST", 'http://192.168.107.178:8000/extractor?clean=true');
+          //   xhr.setRequestHeader('Content-type', 'application/json');
+          //   // xhr.onreadystatechange = function () {
+          //   //     if (xhr.readyState == 4) {
+          //   //          alert('success');
+          //   //     }
+          //   // };
+          //   xhr.send(formdata);
+          //   console.log(formdata);
+          // }
+
+          
+          // function loaded() {
+          // var forms = document.querySelectorAll("form.uploadForm");
+          //   forms[0].addEventListener("submit", proceedUpload, false);
+          // };
+          // loaded()
+          
+
+      </script>
+
+<!-- <script>
+  function ImageToBase64(image) {
+  var img = image.files[0];
+  var reader = new FileReader();
+  reader.onloadend = function()
+  {
+  $("#customeFile").text(reader.result);
+  $("#output-image").attr("src", reader.result);
+  }
+  reader.readAsDataURL(img);
+  }
+  </script> -->
+
+  </body>
+       
+         
+         <script type="text/javascript">
+            $(document).ready(function() {
+              $('input[type="file"]').on("change", function() {
+                let filenames = [];
+                let files = this.files;
+                if (files.length > 1) {
+                  filenames.push("Total Files (" + files.length + ")");
+                } else {
+                  for (let i in files) {
+                    if (files.hasOwnProperty(i)) {
+                      filenames.push(files[i].name);
+                    }
+                  }
+                }
+                $(this)
+                  .next(".custom-file-label")
+                  .html(filenames.join(","));
+              });
+            });
+         </script>
+    </body>
+</html>
